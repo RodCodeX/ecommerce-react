@@ -1,3 +1,4 @@
+import Header from '@/common/components/ui/Header'
 import Head from 'next/head'
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Header />
       <div>Pagina principal</div>
       {/* <div
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
