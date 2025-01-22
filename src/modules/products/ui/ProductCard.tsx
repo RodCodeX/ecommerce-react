@@ -1,11 +1,17 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Rating, Typography } from '@mui/material'
+import RoundedButton from '@/common/components/buttons/RoundedButton'
+import { Box, Card, CardActions, CardContent, CardMedia, Rating, Typography } from '@mui/material'
 import { ProductType } from '../types/productType'
 import Price from './Price'
 
 interface ProductCardProps {
-    product: ProductType
+    product: ProductType,
+    onClick: () => void //?Se va ejecutar una accion
+    // onClick: () => VoidFunction  //?Alternativa
 }
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, onClick }: ProductCardProps) => {
+
+    const isLowStock = product.stock < 3;
+
     return (
         <Card variant="outlined" sx={{ display: 'flex' }}>
             <CardMedia
@@ -14,12 +20,24 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 sx={{
                     width: '240px',
                     backgroundColor: '#f7f7f7',
+                    '&:hover': {
+                        cursor: 'pointer'
+                    }
                 }}
+                onClick={onClick}
                 image={product.thumbnail}
             />
             <Box>
                 <CardContent>
-                    <Typography variant="h5" component="div">
+                    <Typography variant="h5" component="div"
+                        sx={{
+                            '&:hover': {
+                                cursor: 'pointer',
+                                color: 'primary.main',
+                            }
+                        }}
+                        onClick={onClick}
+                    >
                         {product.title}
                     </Typography>
                     <Box display={'flex'} gap={1}>
@@ -60,19 +78,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
                         display={'block'}>
                         {product.warrantyInformation}
                     </Typography>
+                    {isLowStock && (
+                        <Typography
+                            color='error'
+                            fontWeight={'bold'}
+                            variant='caption'
+                            display={'block'}>
+                            Only {product.stock} in stock - buy soon
+                        </Typography>
+                    )}
                 </CardContent>
 
                 <CardActions>
-                    <Button
-                        variant='contained'
-                        size="small"
-                        sx={{
-                            borderRadius: 4,
-                            px: 2
-                        }}
-                    >
-                        ADD TO CART
-                    </Button>
+                    <RoundedButton color='secondary'>ADD TO CART</RoundedButton>
                 </CardActions>
             </Box>
         </Card>

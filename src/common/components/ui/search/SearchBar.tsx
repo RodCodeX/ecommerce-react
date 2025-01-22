@@ -17,7 +17,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
                 height: '40px',
                 display: 'flex',
                 alignItems: 'center',
-                borderRadius: 4
+                borderRadius: 4,
             }}
         >
             <Button
@@ -27,6 +27,8 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
                     borderRadius: 0,
                     borderTopLeftRadius: 4,
                     borderBottomLeftRadius: 4,
+                    boxShadow: 'none',
+                    bgcolor: 'grey.500'
                 }}
             >
                 All
@@ -38,6 +40,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
                 onChange={(e) => setSearchValue(e.target.value)}
             />
             <Button
+                type='submit'
                 variant='contained'
                 onClick={(e) => {
                     e.preventDefault()
@@ -48,12 +51,13 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
                     borderRadius: 0,
                     borderTopRightRadius: 4,
                     borderBottomRightRadius: 4,
+                    boxShadow: 'none',
+                    bgcolor: 'primary.light'
                 }}
-                type='submit'
             >
                 <SearchIcon />
             </Button>
-        </Paper>
+        </Paper >
     )
 }
 

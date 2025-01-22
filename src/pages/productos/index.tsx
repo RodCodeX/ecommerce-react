@@ -2,10 +2,12 @@ import MainLayout from '@/common/components/layouts/MainLayout'
 import { useProductsContext } from '@/modules/products/context/ProductsProvider'
 import ProductList from '@/modules/products/ui/ProductList'
 import { Box, Pagination, Typography } from '@mui/material'
+import { useRouter } from 'next/router'
 
 
 const ProductosPage = () => {
     const { loading, products, totalPages, updatePage } = useProductsContext()
+    const router = useRouter();
 
     return (
         <MainLayout title='Productos'>
@@ -13,7 +15,13 @@ const ProductosPage = () => {
                 <Typography variant='h6' fontWeight={'bold'}>Results</Typography>
                 <Typography variant='body2' color={'text.secondary'}>Check each product page for the buying options.</Typography>
             </Box>
-            <ProductList loading={loading} products={products} />
+            <ProductList
+                loading={loading}
+                products={products}
+                onClickItem={(idProducto) => {
+                    router.push(`/productos/${idProducto}`)
+                }}
+            />
             <Box display={'flex'} justifyContent={'center'} py={4}>
                 <Pagination
                     count={totalPages}

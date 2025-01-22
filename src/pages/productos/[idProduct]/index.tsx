@@ -1,8 +1,9 @@
+import RoundedButton from '@/common/components/buttons/RoundedButton';
 import MainLayout from '@/common/components/layouts/MainLayout';
 import { ProductType } from '@/modules/products/types/productType';
 import Price from '@/modules/products/ui/Price';
 import apiProductos from '@/services/resources/products';
-import { Box, Card, CardContent, Divider, Rating, Typography } from '@mui/material';
+import { Box, Card, CardContent, Divider, MenuItem, Rating, Select, Stack, Typography } from '@mui/material';
 import Grid2 from '@mui/material/Grid2';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -25,53 +26,70 @@ const DetailProductPage = () => {
 
     const [product, setProducto] = useState<ProductType | null>(null)
 
+    const [activeImage, setActiveImage] = useState<string>('');
+
+    const [quantity, setQuantity] = useState<number>(1);
+
     useEffect(() => {
         if (idProducto) {
-            apiProductos.getById(idProducto).then(response => setProducto(response))
+            apiProductos.getById(idProducto).then((product) => {
+                setProducto(product)
+                setActiveImage(product.images?.[0])
+            })
         }
     }, [idProducto])
 
     return (
         <MainLayout title='Detail Product'>
             {product && (
-                <Grid2 container>
+                <Grid2 container sx={{ mt: 3 }}>
                     <Grid2 size={1}>
-                        {product.images.map((image, index) => (
-                            <Card
-                                key={index}
-                                variant='outlined'
-                                sx={{
-                                    width: 50,
-                                    height: 50,
-                                    borderWidth: 2,
-                                    '&:hover': {
-                                        borderColor: 'primary.main',
-                                        cursor: 'pointer'
-                                    }
-                                }}>
-                                <Image
-                                    src={image}
-                                    width={50}
-                                    height={50}
-                                    alt={'imagen'}
-                                />
-                            </Card>
-                        ))}
-
+                        <Stack spacing={1}>
+                            {product.images.map((image, index) => (
+                                <Card
+                                    key={index}
+                                    variant='outlined'
+                                    sx={{
+                                        width: 50,
+                                        height: 50,
+                                        borderWidth: 2,
+                                        borderColor: activeImage === image ? 'primary.main' : '',
+                                        '&:hover': {
+                                            borderColor: 'primary.main',
+                                            cursor: 'pointer'
+                                        }
+                                    }}
+                                    onMouseEnter={() => setActiveImage(image)}
+                                >
+                                    <Image
+                                        src={image}
+                                        width={50}
+                                        height={50}
+                                        alt={'imagen'}
+                                    />
+                                </Card>
+                            ))}
+                        </Stack>
                     </Grid2>
+
                     <Grid2 size={4} position={'relative'}>
                         <Image
-                            src={'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS9cxQcMWSx63uUJmscOomi2sqy-s6bXUzKAJJPCLwx44vGjB8ClSjwSMhrc2LtbEiQh7d7qd-mtq8m4Fouvlzjul3atumOkpMslWbWRw'} fill alt={'imagen'} style={{
+                            src={activeImage}
+                            fill alt={'imagen'}
+                            style={{
                                 objectFit: 'cover'
                             }}
                         />
                     </Grid2>
                     <Grid2 size={5}>
-                        <CardContent>
+                        <CardContent sx={{ pt: 0 }}>
                             <Typography variant="h5" component="div">
                                 {product.title}
                             </Typography>
                             <Box display={'flex'} gap={1}>
+                                <Typography variant="caption" display={'block'} color='primary'>
+                                    {product.rating}
+                                </Typography>
                                 <Rating
                                     name="half-rating-read"
                                     defaultValue={product.rating}
@@ -114,16 +132,9 @@ const DetailProductPage = () => {
                             </Typography>
 
                             <Grid2 container>
-                                <Grid2 size={4}>
-                                    <Typography variant='body2' fontWeight={'bold'}>
-                                        Brand
-                                    </Typography>
-                                </Grid2>
-                                <Grid2 size={8}>
-                                    <Typography variant='body2' >
-                                        Apple
-                                    </Typography>
-                                </Grid2>
+                                <ProductProperty atribute={'Height'} value={product.dimensions.height} />
+                                <ProductProperty atribute={'with'} value={product.dimensions.width} />
+                                <ProductProperty atribute={'depth'} value={product.dimensions.depth} />
                             </Grid2>
 
                             <Divider />
@@ -133,18 +144,60 @@ const DetailProductPage = () => {
                             </Typography>
 
                             <Box component={'ul'}>
-                                <Typography component={'li'} variant='body2' >
-                                    Apple
-                                </Typography>
-
-                                <Typography component={'li'} variant='body2' >
-                                    Apple
-                                </Typography>
+                                {product.reviews.map((review, index) => (
+                                    <Typography key={index} component={'li'} variant='body2' >
+                                        {review.comment}
+                                    </Typography>
+                                ))}
                             </Box>
                         </CardContent>
 
                     </Grid2>
-                    <Grid2 size={2}>acciones</Grid2>
+                    <Grid2 size={2}>
+                        <Card variant='outlined'>
+                            <CardContent sx={{ pt: 0 }}>
+                                <Stack spacing={1}>
+                                    <Price price={product.price} />
+                                    <Typography>{product.returnPolicy}</Typography>
+                                    <Typography color='success' fontWeight={'bold'}>{product.availabilityStatus}</Typography>
+                                    <Select
+                                        id="quantity"
+                                        value={quantity}
+                                        fullWidth
+                                        size='small'
+                                        startAdornment={<Typography
+                                            variant='body2'
+                                            sx={{ mr: 1 }}
+                                        >Quantity: </Typography>}
+                                        sx={{ height: '32px' }}
+                                        onChange={(e) => {
+                                            setQuantity(e.target.value as number)
+                                        }}
+                                    >
+                                        {Array.from({ length: 100 }, (_, index) => (
+                                            <MenuItem key={index} value={index + 1}>
+                                                {index + 1}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    <RoundedButton
+                                        fullWidth
+                                        color='secondary'
+                                    >
+                                        ADD TO CART
+                                    </RoundedButton>
+
+                                    <RoundedButton
+                                        fullWidth
+                                        color='primary'
+                                    >
+                                        BUY NOW
+                                    </RoundedButton>
+
+                                </Stack>
+                            </CardContent>
+                        </Card>
+                    </Grid2>
                 </Grid2>
             )}
         </MainLayout>
@@ -152,3 +205,21 @@ const DetailProductPage = () => {
 }
 
 export default DetailProductPage
+
+
+const ProductProperty = ({ atribute, value }: { atribute: string, value: number }) => {
+    return (
+        <>
+            <Grid2 size={4}>
+                <Typography variant='body2' fontWeight={'bold'}>
+                    {atribute}
+                </Typography>
+            </Grid2>
+            <Grid2 size={8}>
+                <Typography variant='body2' >
+                    {value}
+                </Typography>
+            </Grid2>
+        </>
+    )
+}
