@@ -1,4 +1,4 @@
-import RoundedButton from '@/common/components/buttons/RoundedButton';
+import RoundedButton from '@/common/components/ui/buttons/RoundedButton';
 import MainLayout from '@/common/components/layouts/MainLayout';
 import { ProductType } from '@/modules/products/types/productType';
 import Price from '@/modules/products/ui/Price';
@@ -8,6 +8,7 @@ import Grid2 from '@mui/material/Grid2';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useCartContext } from '@/modules/cart/context/CartProvider';
 
 // const product = {
 //     title: 'PRODUCTO w',
@@ -29,6 +30,8 @@ const DetailProductPage = () => {
     const [activeImage, setActiveImage] = useState<string>('');
 
     const [quantity, setQuantity] = useState<number>(1);
+
+    const { addProduct } = useCartContext();
 
     useEffect(() => {
         if (idProducto) {
@@ -182,16 +185,26 @@ const DetailProductPage = () => {
                                     </Select>
                                     <RoundedButton
                                         fullWidth
-                                        color='secondary'
+                                        color="secondary"
+                                        onClick={() => {
+                                            const cartProduct = {
+                                                id: product.id,
+                                                image: product.thumbnail,
+                                                title: `${product.title} - ${product.description}`,
+                                                price: product.price,
+                                                quantity,
+                                            }
+                                            addProduct(cartProduct)
+                                        }}
                                     >
-                                        ADD TO CART
+                                        Add to cart
                                     </RoundedButton>
 
                                     <RoundedButton
                                         fullWidth
                                         color='primary'
                                     >
-                                        BUY NOW
+                                        Buy Now
                                     </RoundedButton>
 
                                 </Stack>

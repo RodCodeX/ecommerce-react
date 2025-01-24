@@ -1,4 +1,4 @@
-import RoundedButton from '@/common/components/buttons/RoundedButton'
+import RoundedButton from '@/common/components/ui/buttons/RoundedButton'
 import { Box, Card, CardActions, CardContent, CardMedia, Rating, Typography } from '@mui/material'
 import { ProductType } from '../types/productType'
 import Price from './Price'
@@ -6,9 +6,11 @@ import Price from './Price'
 interface ProductCardProps {
     product: ProductType,
     onClick: () => void //?Se va ejecutar una accion
+    onAdd: () => void //?Se va ejecutar una accion
     // onClick: () => VoidFunction  //?Alternativa
+    // onAdd: VoidFuntion
 }
-const ProductCard = ({ product, onClick }: ProductCardProps) => {
+const ProductCard = ({ product, onClick, onAdd }: ProductCardProps) => {
 
     const isLowStock = product.stock < 3;
 
@@ -90,7 +92,12 @@ const ProductCard = ({ product, onClick }: ProductCardProps) => {
                 </CardContent>
 
                 <CardActions>
-                    <RoundedButton color='secondary'>ADD TO CART</RoundedButton>
+                    <RoundedButton
+                        color='secondary'
+                        onClick={onAdd}
+                    >
+                        Add to cart
+                    </RoundedButton>
                 </CardActions>
             </Box>
         </Card>

@@ -1,4 +1,5 @@
 import MainLayout from '@/common/components/layouts/MainLayout'
+import { useCartContext } from '@/modules/cart/context/CartProvider'
 import { useProductsContext } from '@/modules/products/context/ProductsProvider'
 import ProductList from '@/modules/products/ui/ProductList'
 import { Box, Pagination, Typography } from '@mui/material'
@@ -7,6 +8,7 @@ import { useRouter } from 'next/router'
 
 const ProductosPage = () => {
     const { loading, products, totalPages, updatePage } = useProductsContext()
+    const { addProduct } = useCartContext()
     const router = useRouter();
 
     return (
@@ -20,6 +22,16 @@ const ProductosPage = () => {
                 products={products}
                 onClickItem={(idProducto) => {
                     router.push(`/productos/${idProducto}`)
+                }}
+                onAddProduct={(product) => {
+                    const cartProduct = {
+                        id: product.id,
+                        image: product.thumbnail,
+                        title: `${product.title} - ${product.description}`,
+                        price: product.price,
+                        quantity: 1
+                    }
+                    addProduct(cartProduct)
                 }}
             />
             <Box display={'flex'} justifyContent={'center'} py={4}>

@@ -5,9 +5,13 @@ import logoAmazon from '../../../assets/amazon-logo.png';
 import SearchBar from './search/SearchBar';
 import { useProductsContext } from '@/modules/products/context/ProductsProvider';
 import { useRouter } from 'next/router'
+import CardIcon from './icons/Carticon';
+import { useCartContext } from '@/modules/cart/context/CartProvider';
 
 const Header = () => {
     const { updateSearchValue } = useProductsContext();
+    const { totalItems } = useCartContext();
+
     const router = useRouter();
 
     return (
@@ -49,7 +53,7 @@ const Header = () => {
                                 updateSearchValue(value)
                             }}
                         />
-                        <Box>Cart</Box>
+                        <CardIcon quantity={totalItems} />
                     </Box>
                 </Toolbar>
             </AppBar>

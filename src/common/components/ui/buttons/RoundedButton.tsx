@@ -9,7 +9,6 @@ interface RoundedButton extends ButtonProps {
 const RoundedButton = ({ children, sx, ...rest }: RoundedButton) => {
     return (
         <Button
-            {...rest}
             variant='contained'
             size="small"
             sx={{
@@ -22,6 +21,7 @@ const RoundedButton = ({ children, sx, ...rest }: RoundedButton) => {
                 },
                 ...sx,
             }}
+            {...rest}
         >
             {children}
         </Button>
