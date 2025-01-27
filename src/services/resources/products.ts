@@ -14,9 +14,27 @@ const getById = (idProducto: string) => {
   })
 }
 
+const getAllCategory = () => {
+  return apiCore({
+    url: '/products/categories',
+  })
+}
+
+const getByIdCategory = (
+  slug: string,
+  params: Record<string, string | number>
+) => {
+  return apiCore({
+    url: `/products/category/${slug}`,
+    params,
+  })
+}
+
 const apiProductos = {
   getAll,
   getById,
+  getAllCategory,
+  getByIdCategory,
 }
 
 export default apiProductos

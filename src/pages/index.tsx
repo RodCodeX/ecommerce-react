@@ -1,12 +1,36 @@
-import Header from '@/common/components/ui/Header'
-import Head from 'next/head'
+import CarouselContainer from '@/common/components/ui/carousel/CarouseContainer';
+import Categories from '@/common/components/ui/categories/Categories';
+import Header from '@/common/components/ui/Header';
+import apiProductos from '@/services/resources/products';
+import { Box, Container } from '@mui/material';
 
-// const categoryImages = {
-//   beauty: '',
-//   furniture: ''
-// }
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+
+export interface CategoryType {
+  slug: string
+  name: string
+  url: string
+}
 
 export default function Home() {
+  const [category, setCategory] = useState<CategoryType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    setLoading(true)
+    apiProductos
+      .getAllCategory().then((response) => {
+        console.log(response);
+        setCategory(response)
+      }).finally(() => {
+        setLoading(false)
+      })
+  }, [])
+
   return (
     <>
       <Head>
@@ -16,7 +40,31 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <div>Pagina principal</div>
+      <Container>
+        <Box sx={{ position: 'relative' }}>
+          <Box sx={{ position: 'relative', zIndex: 1 }}>
+            <CarouselContainer />
+          </Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: 1,
+              marginTop: '230px',
+              width: '100%',
+            }}
+          >
+            <Categories
+              category={category}
+              loading={loading}
+              onClickItem={(slug) => {
+                router.push(`/productos/categoria/${slug}`)
+              }}
+            />
+          </Box>
+        </Box>
+      </Container>
     </>
-  )
+  );
 }

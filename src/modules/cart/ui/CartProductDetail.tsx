@@ -1,3 +1,4 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
     Box,
     CardContent,
@@ -5,11 +6,9 @@ import {
     Divider,
     Stack,
     Typography,
-} from '@mui/material'
-import { CartProductType } from '../types/cartTypes'
-import QuantityUpdater from './QuantityUpdate'
-// import QuantityUpdater from './QuantityUpdater'
-
+} from '@mui/material';
+import { CartProductType } from '../types/cartTypes';
+import QuantityUpdater from './QuantityUpdate';
 interface CartProductDetailProps {
     product: CartProductType
     onClick: VoidFunction
@@ -77,7 +76,7 @@ const CartProductDetail = ({
                             },
                         }}
                     >
-                        Delete
+                        <DeleteIcon />
                     </Typography>
                 </Stack>
             </CardContent>

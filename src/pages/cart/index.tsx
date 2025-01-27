@@ -1,4 +1,5 @@
 import MainLayout from "@/common/components/layouts/MainLayout";
+import RoundedButton from "@/common/components/ui/buttons/RoundedButton";
 import { useCartContext } from "@/modules/cart/context/CartProvider";
 import CartProductDetail from "@/modules/cart/ui/CartProductDetail";
 import { Box, Divider, Grid2, Paper, Stack, Typography } from "@mui/material";
@@ -6,12 +7,13 @@ import { useRouter } from "next/navigation";
 
 const CartPage = () => {
 
-    const { cartProducts, deleteProduct, updateQuantity } = useCartContext();
+    const { cartProducts, totalCost, deleteProduct, updateQuantity } = useCartContext();
+
     const router = useRouter()
 
     return (
         <MainLayout title="cart">
-            <Grid2 container mt={4}>
+            <Grid2 container mt={4} spacing={2}>
                 <Grid2 size={10}>
                     <Paper variant="outlined" sx={{ p: 2 }}>
                         <Box
@@ -40,9 +42,26 @@ const CartPage = () => {
                     </Paper>
 
                 </Grid2>
-                <Grid2 size={2}>Acciones</Grid2>
+                <Grid2 size={2}>
+                    <Box textAlign={'start'} px={1} py={2}>
+                        <Typography variant='caption'>SubTotal</Typography>
+                        <Typography
+                            variant='body2'
+                            color='error'
+                            fontWeight={'bold'}
+                            gutterBottom
+                        >
+                            $ {totalCost}
+                        </Typography>
+                        <RoundedButton
+                            variant='outlined'
+                            fullWidth
+                            onClick={() => router.push('/cart')}>
+                            Procesar el Pago
+                        </RoundedButton>
+                    </Box>
+                </Grid2>
             </Grid2>
-
         </MainLayout>
     )
 }

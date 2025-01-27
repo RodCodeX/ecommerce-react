@@ -4,8 +4,8 @@ import { Box, Container, Divider, Drawer, Stack, Typography } from '@mui/materia
 import Head from 'next/head'
 import { useRouter } from 'next/navigation'
 import { ReactNode } from 'react'
-import Header from '../ui/Header'
 import RoundedButton from '../ui/buttons/RoundedButton'
+import Header from '../ui/Header'
 
 const DRAWER_WIDTH = 140
 interface MainLayoutProps {
@@ -30,7 +30,6 @@ const MainLayout = ({ children, title = 'Amazon Defecto' }: MainLayoutProps) => 
                 <Container>
                     {children}
                 </Container>
-                {/* TODO: add footer */}
                 {/* <Footer /> */}
             </Box>
             <Drawer
